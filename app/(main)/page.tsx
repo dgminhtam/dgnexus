@@ -5,7 +5,7 @@ import { PnlDistributionChart } from "@/components/pnl-distribution-chart"
 import { StrategyTable } from "@/components/strategy-table"
 import { StrategyPieChart } from "@/components/strategy-pie-chart"
 import { TradeHistoryTable } from "@/components/trade-history-table"
-
+export const dynamic = "force-dynamic";
 export default async function Page() {
     const [
         metrics,
