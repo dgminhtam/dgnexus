@@ -5,7 +5,7 @@ export const metadata = {
     title: 'Quản lý Template Prompt',
     description: 'Quản lý các system prompts cho hệ thống AI',
 };
-
+export const dynamic = "force-dynamic";
 export default async function TemplatesPage() {
     const prompts = await getSystemPrompts();
 

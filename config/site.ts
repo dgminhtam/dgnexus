@@ -26,6 +26,10 @@ export const siteConfig = {
             icon: Settings2,
             items: [
                 {
+                    title: "Promts",
+                    url: "/promts",
+                },
+                {
                     title: "Template",
                     url: "/templates",
                 },
