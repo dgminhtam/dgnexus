@@ -1,6 +1,7 @@
 "use server"
 
-import { Metric, CumulativePnl, PnlDistribution, StrategyPerformance, TradeHistoryResponse } from '../lib/definitions';
+import { revalidatePath } from 'next/cache';
+import { Metric, CumulativePnl, PnlDistribution, StrategyPerformance, TradeHistoryResponse, SystemPrompt } from '../lib/definitions';
 import { fetchAuthenticated } from './auth/action';
 
 export const getMetrics = async () =>
@@ -17,3 +18,15 @@ export const getStrategyPerformance = async () =>
 
 export const getTradeHistory = async (page: number = 1, limit: number = 50) =>
   fetchAuthenticated<TradeHistoryResponse>(`/trades/history?page=${page}&limit=${limit}`);
+
+export const getSystemPrompts = async () =>
+  fetchAuthenticated<SystemPrompt[]>('/prompts');
+
+export const updateSystemPrompt = async (promptId: string, content: string) => {
+  const result = await fetchAuthenticated<any>(`/prompts/${promptId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ content })
+  });
+  revalidatePath('/templates');
+  return result;
+};

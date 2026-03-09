@@ -47,3 +47,14 @@ export interface TradeHistoryResponse {
   };
   data: TradeHistoryItem[];
 }
+
+export interface SystemPrompt {
+  id: string;
+  content: string;
+  description: string | null;
+  updated_at: string;
+}
+
+export interface PromptUpdatePayload {
+  content: string;
+}
