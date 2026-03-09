@@ -27,6 +27,19 @@ export const updateSystemPrompt = async (promptId: string, content: string) => {
     method: 'PUT',
     body: JSON.stringify({ content })
   });
-  revalidatePath('/templates');
+  revalidatePath('/promts');
+  return result;
+};
+
+export const getMessageTemplates = async () =>
+  fetchAuthenticated<SystemPrompt[]>('/templates');
+
+export const updateMessageTemplate = async (templateId: string, content: string) => {
+  const result = await fetchAuthenticated<any>(`/templates/${templateId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ content })
+  });
+  revalidatePath('/telegram');
+  revalidatePath('/wordpress');
   return result;
 };

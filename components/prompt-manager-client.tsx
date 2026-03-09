@@ -5,13 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { SystemPrompt } from '@/app/lib/definitions';
-import { updateSystemPrompt } from '@/app/api/action';
 
 interface PromptManagerClientProps {
     prompts: SystemPrompt[];
+    onSave: (id: string, content: string) => Promise<any>;
 }
 
-export function PromptManagerClient({ prompts }: PromptManagerClientProps) {
+export function PromptManagerClient({ prompts, onSave }: PromptManagerClientProps) {
     const [selectedPromptId, setSelectedPromptId] = useState<string>(prompts[0]?.id || '');
     const [editContent, setEditContent] = useState<string>('');
     const [isPending, startTransition] = useTransition();
@@ -34,12 +34,12 @@ export function PromptManagerClient({ prompts }: PromptManagerClientProps) {
 
         startTransition(async () => {
             try {
-                await updateSystemPrompt(selectedPromptId, editContent);
+                await onSave(selectedPromptId, editContent);
                 setIsSuccess(true);
                 setTimeout(() => setIsSuccess(false), 3000);
             } catch (error) {
-                console.error("Failed to update prompt", error);
-                alert("Có lỗi xảy ra khi lưu prompt.");
+                console.error("Failed to save", error);
+                alert("Có lỗi xảy ra khi lưu.");
             }
         });
     };

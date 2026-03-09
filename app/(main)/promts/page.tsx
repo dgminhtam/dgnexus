@@ -1,4 +1,4 @@
-import { getSystemPrompts } from '@/app/api/action';
+import { getSystemPrompts, updateSystemPrompt } from '@/app/api/action';
 import { PromptManagerClient } from '@/components/prompt-manager-client';
 
 export const metadata = {
@@ -15,7 +15,7 @@ export default async function TemplatesPage() {
                 <h2 className="text-3xl font-bold tracking-tight">Quản lý Template Prompt</h2>
             </div>
             <div className="mt-4">
-                <PromptManagerClient prompts={prompts || []} />
+                <PromptManagerClient prompts={prompts || []} onSave={updateSystemPrompt} />
             </div>
         </div>
     );
