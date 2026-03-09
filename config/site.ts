@@ -30,10 +30,6 @@ export const siteConfig = {
                     url: "/promts",
                 },
                 {
-                    title: "Template",
-                    url: "/templates",
-                },
-                {
                     title: "Wordpress",
                     url: "/wordpress",
                 },
