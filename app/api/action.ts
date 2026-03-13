@@ -43,3 +43,23 @@ export const updateMessageTemplate = async (templateId: string, content: string)
   revalidatePath('/wordpress');
   return result;
 };
+
+export type SystemConfig = {
+  key: string;
+  value: string;
+  value_type: string;
+  group_name: string;
+  description: string;
+};
+
+export const getSystemConfigs = async () =>
+  fetchAuthenticated<SystemConfig[]>('/configs');
+
+export const updateSystemConfig = async (key: string, value: string) => {
+  const result = await fetchAuthenticated<any>(`/configs/${key}`, {
+    method: 'PUT',
+    body: JSON.stringify({ value })
+  });
+  revalidatePath('/settings/trade');
+  return result;
+};
