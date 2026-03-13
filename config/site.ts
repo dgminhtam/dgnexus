@@ -27,7 +27,7 @@ export const siteConfig = {
             items: [
                 {
                     title: "Trade",
-                    url: "/trade",
+                    url: "/settings/trade",
                 },
                 {
                     title: "Promts",
