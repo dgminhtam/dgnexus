@@ -30,6 +30,10 @@ export const siteConfig = {
                     url: "/settings/trade",
                 },
                 {
+                    title: "Chiến lược",
+                    url: "/strategies",
+                },
+                {
                     title: "Promts",
                     url: "/promts",
                 },
