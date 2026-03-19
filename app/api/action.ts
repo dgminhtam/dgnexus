@@ -53,7 +53,7 @@ export type SystemConfig = {
 };
 
 export const getSystemConfigs = async () =>
-  fetchAuthenticated<SystemConfig[]>('/configs');
+  fetchAuthenticated<Record<string, SystemConfig[]>>('/configs');
 
 export const updateSystemConfig = async (key: string, value: string) => {
   const result = await fetchAuthenticated<any>(`/configs/${key}`, {
@@ -63,26 +63,4 @@ export const updateSystemConfig = async (key: string, value: string) => {
   revalidatePath('/settings/trade');
   return result;
 };
-
-export interface StrategyConfig {
-  id: number;
-  name: string;
-  description: string;
-  is_enabled: boolean;
-  risk_percent: number;
-  sl_distance: number;
-  tp_distance: number;
-  extra_params: any;
-}
-
-export const getStrategies = async () =>
-  fetchAuthenticated<StrategyConfig[]>('/strategies');
-
-export const updateStrategy = async (id: number, payload: Partial<StrategyConfig>) => {
-  const result = await fetchAuthenticated<any>(`/strategies/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(payload)
-  });
-  revalidatePath('/strategies');
-  return result;
-};
+

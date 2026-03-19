@@ -2,7 +2,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { getMetrics, getCumulativePnl, getPnlDistribution, getStrategyPerformance, getTradeHistory } from "../api/action"
 import { CumulativePnlChart } from "@/components/cumulative-pnl-chart"
 import { PnlDistributionChart } from "@/components/pnl-distribution-chart"
-import { StrategyTable } from "@/components/strategy-table"
 import { StrategyPieChart } from "@/components/strategy-pie-chart"
 import { TradeHistoryTable } from "@/components/trade-history-table"
 export const dynamic = "force-dynamic";
@@ -64,8 +63,7 @@ export default async function Page() {
                     <CardDescription>Performance breakdown by trading strategy</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                        <StrategyTable data={strategyPerformanceData || []} />
+                    <div className="grid grid-cols-1 gap-4 lg:grid-cols-1 max-w-2xl mx-auto">
                         <StrategyPieChart data={strategyPerformanceData || []} />
                     </div>
                 </CardContent>

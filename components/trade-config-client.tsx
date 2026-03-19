@@ -7,25 +7,18 @@ import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
+export function TradeConfigClient({ configs }: { configs: Record<string, SystemConfig[]> }) {
   const [isPending, startTransition] = useTransition();
-  const [localConfigs, setLocalConfigs] = useState(configs);
+  const [localConfigs, setLocalConfigs] = useState<Record<string, SystemConfig[]>>(configs);
 
-  // Group by group_name
-  const groupedConfigs = localConfigs.reduce((acc, config) => {
-    const group = config.group_name || "OTHER";
-    if (!acc[group]) {
-      acc[group] = [];
-    }
-    acc[group].push(config);
-    return acc;
-  }, {} as Record<string, SystemConfig[]>);
+  const groups = Object.keys(localConfigs);
 
-  const groups = Object.keys(groupedConfigs);
-
-  const handleToggle = (key: string, checked: boolean) => {
+  const handleToggle = (group: string, key: string, checked: boolean) => {
     // Optimistic update
-    setLocalConfigs(prev => prev.map(c => c.key === key ? { ...c, value: checked ? "true" : "false" } : c));
+    setLocalConfigs(prev => ({
+      ...prev,
+      [group]: prev[group].map(c => c.key === key ? { ...c, value: checked ? "true" : "false" } : c)
+    }));
     startTransition(async () => {
       try {
         await updateSystemConfig(key, checked ? "true" : "false");
@@ -35,8 +28,11 @@ export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
     });
   };
 
-  const handleNumberSave = (key: string, value: string) => {
-    setLocalConfigs(prev => prev.map(c => c.key === key ? { ...c, value } : c));
+  const handleNumberSave = (group: string, key: string, value: string) => {
+    setLocalConfigs(prev => ({
+      ...prev,
+      [group]: prev[group].map(c => c.key === key ? { ...c, value } : c)
+    }));
     startTransition(async () => {
       try {
         await updateSystemConfig(key, value);
@@ -64,7 +60,7 @@ export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
         {groups.map(group => (
           <TabsContent key={group} value={group} className="focus-visible:outline-none focus-visible:ring-0">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {groupedConfigs[group].map(config => (
+              {localConfigs[group].map(config => (
                 <div key={config.key} className="p-5 border rounded-2xl bg-card shadow-sm hover:shadow-md transition-shadow space-y-4">
                   <div className="flex flex-col gap-1.5">
                     <label className="text-sm font-semibold text-foreground leading-none">
@@ -79,7 +75,7 @@ export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
                     <div className="flex items-center space-x-3 pt-1">
                       <Switch
                         checked={config.value === "true" || config.value === "1" || config.value.toLowerCase() === "yes"}
-                        onCheckedChange={(checked) => handleToggle(config.key, checked)}
+                        onCheckedChange={(checked) => handleToggle(group, config.key, checked)}
                         disabled={isPending}
                       />
                       <span className="text-sm font-medium text-muted-foreground">
@@ -94,7 +90,7 @@ export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
                         step={config.value_type === "float" ? "0.01" : "1"}
                         onBlur={(e) => {
                           if (e.target.value !== config.value && e.target.value !== "") {
-                            handleNumberSave(config.key, e.target.value);
+                            handleNumberSave(group, config.key, e.target.value);
                           }
                         }}
                         disabled={isPending}
@@ -107,7 +103,7 @@ export function TradeConfigClient({ configs }: { configs: SystemConfig[] }) {
                         onClick={(e) => {
                           const input = e.currentTarget.previousElementSibling as HTMLInputElement;
                           if (input && input.value !== config.value && input.value !== "") {
-                            handleNumberSave(config.key, input.value);
+                            handleNumberSave(group, config.key, input.value);
                           }
                         }}
                         className="px-3"

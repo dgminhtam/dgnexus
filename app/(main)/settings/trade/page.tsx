@@ -17,7 +17,7 @@ export default async function TradeConfigPage() {
       </div>
       
       <div className="mt-4">
-        <TradeConfigClient configs={configs || []} />
+        <TradeConfigClient configs={configs || {}} />
       </div>
     </div>
   );
